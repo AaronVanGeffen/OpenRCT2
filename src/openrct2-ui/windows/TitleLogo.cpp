@@ -21,6 +21,7 @@
 #include <openrct2-ui/interface/Widget.h>
 #include <openrct2/interface/Colour.h>
 #include <openrct2/drawing/Drawing.h>
+#include <openrct2/core/String.hpp>
 
 // clang-format off
 static rct_widget window_title_logo_widgets[] = {
@@ -67,7 +68,13 @@ static rct_window_event_list window_title_logo_events = {
  */
 rct_window * window_title_logo_open()
 {
-    rct_window *window = window_create(0, 0, 232, 136, &window_title_logo_events, WC_TITLE_LOGO, WF_STICK_TO_BACK | WF_TRANSPARENT);
+    rct_window * window = window_create(0,
+                                        0,
+                                        16 * 16,
+                                        16 * 16,
+                                        &window_title_logo_events,
+                                        WC_TITLE_LOGO,
+                                        WF_STICK_TO_BACK | WF_TRANSPARENT);
     window->widgets = window_title_logo_widgets;
     window_init_scroll_widgets(window);
     window->colours[0] = TRANSLUCENT(COLOUR_GREY);
@@ -83,8 +90,16 @@ rct_window * window_title_logo_open()
 */
 static void window_title_logo_paint(rct_window *w, rct_drawpixelinfo *dpi)
 {
-    sint32 x = 2;
-    sint32 y = 2;
-    gfx_draw_sprite(dpi, SPR_G2_LOGO, w->x + x, w->y + y, 0);
-    gfx_draw_sprite(dpi, SPR_G2_TITLE, w->x + x + 104, w->y + y + 18, 0);
+    for (int y = 0; y < 16; y++)
+    {
+        for (int x = 0; x < 16; x++)
+        {
+            int _x = w->x + x * 16;
+            int _y = w->y + y * 16;
+            gfx_fill_rect(dpi, _x, _y, _x + 15, _y + 15, x + y * 16);
+            utf8* str = String::Format("%02X", x +y*16);
+            gCurrentFontSpriteBase = FONT_SPRITE_BASE_SMALL;
+            gfx_draw_string_centred(dpi, STR_STRING, _x + 8, _y+3, COLOUR_WHITE, &str);
+        }
+    }
 }
