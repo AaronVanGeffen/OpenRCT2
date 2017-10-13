@@ -1321,6 +1321,8 @@ TTFSurface *TTF_RenderUTF8_Shaded(TTF_Font *font,
     textbuf->pitch = width;
     textbuf->pixels = calloc(1, width * height);
 
+    font->hinting = FT_LOAD_TARGET_MONO;
+
     /* Adding bound checking to avoid all kinds of memory corruption errors
        that may occur. */
     dst_check = (uint8*) textbuf->pixels + textbuf->pitch * textbuf->h;
