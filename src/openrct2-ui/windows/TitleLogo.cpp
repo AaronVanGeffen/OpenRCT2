@@ -10,14 +10,16 @@
 #include <openrct2-ui/interface/Widget.h>
 #include <openrct2-ui/windows/Windows.h>
 #include <openrct2/SpriteIds.h>
+#include <openrct2/core/String.hpp>
 #include <openrct2/drawing/Drawing.h>
+#include <openrct2/drawing/Rectangle.h>
 #include <openrct2/interface/Colour.h>
 #include <openrct2/interface/ColourWithFlags.h>
 #include <openrct2/ui/WindowManager.h>
 
 namespace OpenRCT2::Ui::Windows
 {
-    static constexpr ScreenSize kWindowSize = { 232, 136 };
+    static constexpr ScreenSize kWindowSize = { 16 * 16, 16 * 16 };
 
     enum
     {
@@ -37,20 +39,6 @@ namespace OpenRCT2::Ui::Windows
         void onOpen() override
         {
             setWidgets(_titleLogoWidgets);
-            WindowInitScrollWidgets(*this);
-            colours[0] = ColourWithFlags{ COLOUR_GREY }.withFlag(ColourFlag::translucent, true);
-            colours[1] = ColourWithFlags{ COLOUR_GREY }.withFlag(ColourFlag::translucent, true);
-            colours[2] = ColourWithFlags{ COLOUR_GREY }.withFlag(ColourFlag::translucent, true);
-        }
-
-        void onMouseUp(WidgetIndex widgetIndex) override
-        {
-            switch (widgetIndex)
-            {
-                case WIDX_LOGO:
-                    AboutOpen();
-                    break;
-            }
         }
 
         /**
@@ -59,9 +47,18 @@ namespace OpenRCT2::Ui::Windows
          */
         void onDraw(Drawing::RenderTarget& rt) override
         {
-            auto screenCoords = windowPos + ScreenCoordsXY{ 2, 2 };
-            GfxDrawSprite(rt, ImageId(SPR_G2_LOGO), screenCoords);
-            GfxDrawSprite(rt, ImageId(SPR_G2_TITLE), screenCoords + ScreenCoordsXY{ 104, 18 });
+            for (int y = 0; y < 16; y++)
+            {
+                for (int x = 0; x < 16; x++)
+                {
+                    auto screenPos = windowPos + ScreenCoordsXY{ x * 16, y * 16 };
+                    auto colour = x + y * 16;
+                    Drawing::Rectangle::fill(rt, ScreenRect{ screenPos, screenPos + ScreenCoordsXY{ 16, 16 } }, colour);
+
+                    auto str = String::stdFormat("%02X", colour);
+                    DrawText(rt, screenPos + ScreenCoordsXY{ 8, 3 }, { TextAlignment::centre }, str.c_str(), true);
+                }
+            }
         }
     };
 
