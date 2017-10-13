@@ -719,7 +719,7 @@ static void ttf_draw_string_raw_sprite(rct_drawpixelinfo *dpi, const utf8 *text,
 
 static uint8 colormap[256][256] = {0};
 
-uint8 findClosestIndex(uint8 red, uint8 green, uint8 blue)
+static uint8 findClosestIndex(uint8 red, uint8 green, uint8 blue)
 {
     sint16 closest = -1;
     sint32 closestDistance = INT32_MAX;
@@ -739,7 +739,7 @@ uint8 findClosestIndex(uint8 red, uint8 green, uint8 blue)
     return closest;
 }
 
-uint8 blend(const uint8 base, const uint8 layer)
+static uint8 blend(const uint8 base, const uint8 layer)
 {
     const uint8 cMin = min(base, layer);
     const uint8 cMax = max(base, layer);
