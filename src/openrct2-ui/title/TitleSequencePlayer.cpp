@@ -28,6 +28,8 @@
 #include <openrct2/localisation/StringIds.h>
 #include <openrct2/management/NewsItem.h>
 #include <openrct2/object/ObjectManager.h>
+#include <openrct2/object/ScenarioTextObject.h>
+#include <openrct2/park/ParkPreview.h>
 #include <openrct2/scenario/ScenarioRepository.h>
 #include <openrct2/scenario/ScenarioSources.h>
 #include <openrct2/scenes/title/TitleScene.h>
@@ -329,6 +331,23 @@ namespace OpenRCT2::Title
                     ReportProgress(100);
 
                     MapAnimations::MarkAllTiles();
+
+                    if (auto* stexObject = objectManager.GetLoadedObject<ScenarioTextObject>(0); stexObject != nullptr)
+                    {
+                        auto preview = generatePreviewFromGameState(getGameState());
+                        for (auto& image : preview.images)
+                        {
+                            auto filename = "/Users/aaron/scenario_meta/" + std::string(stexObject->GetIdentifier());
+                            if (image.type == PreviewImageType::miniMap)
+                                filename += "_minimap.png";
+                            else if (image.type == PreviewImageType::screenshot)
+                                filename += "_screenshot.png";
+                            else
+                                continue;
+
+                            writePreviewImageToFile(image, filename);
+                        }
+                    }
                 }
                 PrepareParkForPlayback();
                 _initialLoadCommand = false;

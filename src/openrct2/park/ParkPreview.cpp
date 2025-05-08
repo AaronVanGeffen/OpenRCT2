@@ -10,9 +10,11 @@
 #include "ParkPreview.h"
 
 #include "../Context.h"
+#include "../Diagnostic.h"
 #include "../GameState.h"
 #include "../OpenRCT2.h"
 #include "../SpriteIds.h"
+#include "../core/Imaging.h"
 #include "../core/Numerics.hpp"
 #include "../drawing/Drawing.h"
 #include "../drawing/X8DrawingEngine.h"
@@ -50,6 +52,29 @@ namespace OpenRCT2
             preview.images.push_back(*image);
 
         return preview;
+    }
+
+    bool writePreviewImageToFile(const PreviewImage& preview, const std::string& path)
+    {
+        try
+        {
+            Image image = {
+                .Width = preview.width,
+                .Height = preview.height,
+                .Depth = 8,
+                .Pixels = std::vector<uint8_t>(preview.pixels, preview.pixels + sizeof(preview.pixels)),
+                .Palette = gPalette,
+                .Stride = preview.width,
+            };
+
+            Imaging::WriteToFile(path, image, ImageFormat::png);
+            return true;
+        }
+        catch (const std::exception& e)
+        {
+            LOG_ERROR("Unable to write png: %s", e.what());
+            return false;
+        }
     }
 
     static uint8_t _tileColourIndex = 0;
@@ -184,14 +209,7 @@ namespace OpenRCT2
         const auto mainViewport = WindowGetViewport(mainWindow);
 
         CoordsXYZD mapPosXYZD{};
-        if (mainViewport != nullptr)
-        {
-            const auto centre = mainViewport->viewPos
-                + ScreenCoordsXY{ mainViewport->ViewWidth() / 2, mainViewport->ViewHeight() / 2 };
-            const auto mapPos = ViewportPosToMapPos(centre, 24, mainViewport->rotation);
-            mapPosXYZD = CoordsXYZD(mapPos.x, mapPos.y, int32_t{ TileElementHeight(mapPos) }, mainViewport->rotation);
-        }
-        else if (!gameState.park.Entrances.empty())
+        if (!gameState.park.Entrances.empty())
         {
             const auto& entrance = gameState.park.Entrances[0];
             mapPosXYZD = CoordsXYZD(entrance.x + 16, entrance.y + 16, entrance.z + 32, DirectionReverse(entrance.direction));

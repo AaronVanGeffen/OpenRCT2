@@ -54,5 +54,6 @@ namespace OpenRCT2
     struct GameState_t;
 
     ParkPreview generatePreviewFromGameState(const GameState_t& gameState);
+    bool writePreviewImageToFile(const PreviewImage& preview, const std::string& path);
     void drawPreviewImage(const PreviewImage& image, RenderTarget& rt, ScreenCoordsXY screenPos);
 } // namespace OpenRCT2
