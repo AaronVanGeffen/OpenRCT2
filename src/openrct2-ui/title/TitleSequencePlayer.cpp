@@ -20,6 +20,7 @@
 #include <openrct2/OpenRCT2.h>
 #include <openrct2/ParkImporter.h>
 #include <openrct2/core/Console.hpp>
+#include <openrct2/core/FileSystem.hpp>
 #include <openrct2/core/Guard.hpp>
 #include <openrct2/core/Path.hpp>
 #include <openrct2/core/String.hpp>
@@ -337,11 +338,22 @@ namespace OpenRCT2::Title
                         auto preview = generatePreviewFromGameState(getGameState());
                         for (auto& image : preview.images)
                         {
-                            auto filename = "/Users/aaron/scenario_meta/" + std::string(stexObject->GetIdentifier());
+                            static constexpr std::string_view kSourceGames[] = {
+                                "custom", "rct2ww", "rct2tt", "official", "rct1", "rct1", "rct1", "rct2",
+                            };
+
+                            auto game = EnumValue(stexObject->GetSourceGames()[0]);
+                            auto sourceGame = kSourceGames[game];
+
+                            auto metaPath = fs::path("/Users/aaron/scenario_meta/") / sourceGame / "scenario_meta"
+                                / stexObject->GetIdentifier() / "images";
+                            fs::create_directories(metaPath);
+
+                            auto filename = metaPath;
                             if (image.type == PreviewImageType::miniMap)
-                                filename += "_minimap.png";
+                                filename /= "minimap.png";
                             else if (image.type == PreviewImageType::screenshot)
-                                filename += "_screenshot.png";
+                                filename /= "screenshot.png";
                             else
                                 continue;
 
