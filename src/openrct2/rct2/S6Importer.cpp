@@ -1858,7 +1858,7 @@ namespace OpenRCT2::RCT2
             int objectIt = 0;
             ObjectEntryIndex surfaceCount = 0;
             ObjectEntryIndex railingCount = 0;
-            for (int16_t objectType = EnumValue(ObjectType::ride); objectType < EnumValue(ObjectType::water); objectType++)
+            for (int16_t objectType = EnumValue(ObjectType::ride); objectType <= EnumValue(ObjectType::water); objectType++)
             {
                 for (int16_t i = 0; i < kRCT2ObjectEntryGroupCounts[objectType]; i++, objectIt++)
                 {
@@ -1940,8 +1940,6 @@ namespace OpenRCT2::RCT2
                 _terrainSurfaceEntries.AddRange(OpenRCT2HybridTerrainSurfaces);
                 _terrainEdgeEntries.AddRange(OpenRCT2HybridTerrainEdges);
             }
-
-            AppendRequiredObjects(objectList, ObjectType::water, std::vector<std::string_view>({ "rct2.water.wtrcyan" }));
 
             AppendRequiredObjects(objectList, ObjectType::terrainSurface, _terrainSurfaceEntries);
             AppendRequiredObjects(objectList, ObjectType::terrainEdge, _terrainEdgeEntries);

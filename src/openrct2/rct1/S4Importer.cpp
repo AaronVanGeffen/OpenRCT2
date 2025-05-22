@@ -632,7 +632,15 @@ namespace OpenRCT2::RCT1
 
         void AddEntryForWater()
         {
-            std::string_view entryName = RCT1::GetWaterObject(RCT1_WATER_CYAN);
+            std::string_view entryName;
+            if (_gameVersion < FILE_VERSION_RCT1_LL)
+            {
+                entryName = RCT1::GetWaterObject(RCT1_WATER_CYAN);
+            }
+            else
+            {
+                entryName = RCT1::GetWaterObject(_s4.WaterColour);
+            }
             _waterEntry.GetOrAddEntry(entryName);
         }
 
