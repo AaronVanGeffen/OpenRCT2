@@ -38,6 +38,7 @@
 #include "../ui/WindowManager.h"
 #include "../world/Climate.h"
 #include "../world/Map.h"
+#include "../world/tile_element/EntranceElement.h"
 #include "../world/tile_element/LargeSceneryElement.h"
 #include "../world/tile_element/SmallSceneryElement.h"
 #include "../world/tile_element/TileElement.h"
@@ -905,6 +906,15 @@ namespace OpenRCT2
                 return;
             ViewportRotateSingleInternal(*w, direction);
         });
+
+
+        const auto& entrance = getGameState().park.Entrances[0];
+        auto el = MapGetParkEntranceElementAt(entrance, false);
+        if (el != nullptr)
+        {
+            auto rotation = static_cast<uint8_t>(el->GetDirection());
+            printf("\rpark entrance direction: %d, viewport direction: %d\n", rotation, ViewportGetMain()->rotation);
+        }
     }
 
     /**

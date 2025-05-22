@@ -301,7 +301,7 @@ namespace OpenRCT2::Title
 
         bool LoadParkFromFile(const u8string& path)
         {
-            LOG_VERBOSE("TitleSequencePlayer::LoadParkFromFile(%s)", path.c_str());
+            LOG_INFO("TitleSequencePlayer::LoadParkFromFile(%s)", path.c_str());
             bool success = false;
             try
             {
@@ -364,6 +364,20 @@ namespace OpenRCT2::Title
                 PrepareParkForPlayback();
                 _initialLoadCommand = false;
                 success = true;
+
+                auto& objectManager = GetContext()->GetObjectManager();
+                if (auto* stexObject = objectManager.GetLoadedObject<ScenarioTextObject>(0); stexObject != nullptr)
+                {
+                    auto preview = generatePreviewFromGameState(getGameState());
+                    for (auto& image : preview.images)
+                    {
+                        if (image.type != PreviewImageType::screenshot)
+                            continue;
+
+                        auto filename = fs::path("/Users/aaron/scenario_meta/") / (std::string(stexObject->GetIdentifier()) + ".png");
+                        writePreviewImageToFile(image, filename);
+                    }
+                }
             }
             catch (const std::exception&)
             {

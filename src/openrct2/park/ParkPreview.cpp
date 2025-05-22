@@ -20,7 +20,9 @@
 #include "../drawing/X8DrawingEngine.h"
 #include "../interface/Viewport.h"
 #include "../interface/Window.h"
+#include "../interface/WindowBase.h"
 #include "../ride/RideManager.hpp"
+#include "../world/tile_element/EntranceElement.h"
 #include "../world/tile_element/SurfaceElement.h"
 #include "../world/tile_element/TileElement.h"
 
@@ -205,14 +207,39 @@ namespace OpenRCT2
             return std::nullopt;
 
         const auto& gameState = getGameState();
-        const auto mainWindow = WindowGetMain();
-        const auto mainViewport = WindowGetViewport(mainWindow);
+        auto* mainWindow = WindowGetMain();
+        auto* mainViewport = WindowGetViewport(mainWindow);
 
         CoordsXYZD mapPosXYZD{};
         if (!gameState.park.Entrances.empty())
         {
             const auto& entrance = gameState.park.Entrances[0];
-            mapPosXYZD = CoordsXYZD(entrance.x + 16, entrance.y + 16, entrance.z + 32, DirectionReverse(entrance.direction));
+            mapPosXYZ = CoordsXYZ{ entrance.x + 16, entrance.y + 16, entrance.z + 32, entrance.direction };
+
+            auto el = MapGetParkEntranceElementAt(entrance, false);
+            if (el != nullptr)
+            {
+                auto rotation = static_cast<uint8_t>(el->GetDirection());
+                printf("\rPark element rotation: %d\n", rotation);
+
+                auto viewPos = centre_2d_coordinates(mapPosXYZ, mainViewport);
+                if (viewPos != std::nullopt)
+                    mainViewport->viewPos = *viewPos;
+
+                printf("\rViewport rotation before: %d\n", mainViewport->rotation);
+
+                while (mainViewport->rotation != rotation)
+                {
+                    printf("\rRotating once\n");
+                    ViewportRotateSingle(mainWindow, 1);
+                }
+
+                printf("\rViewport rotation after: %d\n", mainViewport->rotation);
+            }
+            else
+            {
+                printf("\rNo entrance found!\n");
+            }
         }
         else
         {
