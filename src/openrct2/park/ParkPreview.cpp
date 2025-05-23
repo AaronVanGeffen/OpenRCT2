@@ -226,10 +226,10 @@ namespace OpenRCT2
                 static TileCoordsXYZ coords[4][4] = {
                     // viewport 0
                     {
-                        {   0,   0,  0 }, // North (e.g. Pokey Park, Millennium Mines, Crumbly Woods)
+                        {  -7,  -2,  0 }, // North (e.g. Pokey Park, Millennium Mines, Crumbly Woods)
                         {   0,   0,  0 }, // East (e.g. Cleveland's Luna Park)
                         {   0,   0,  0 }, // South (e.g. Crater Lake, Urbis Incognitus)
-                        {   0,   0,  0 }, // West (e.g. Trinity Islands, Whispering Cliffs, Canary Mines)
+                        {  -2,  -7,  0 }, // West (e.g. Trinity Islands, Whispering Cliffs, Canary Mines)
                     },
                     // viewport 1
                     {
@@ -242,12 +242,12 @@ namespace OpenRCT2
                     {
                         {   0,   0,  0 }, // North (n/a)
                         {   0,   0,  0 }, // East (e.g. Mega Park, Gentle Glen)
-                        {   0,   0,  0 }, // South (e.g. Evergreen Gardens, Katie's Dreamland, Funtopia)
+                        {   7,   2,  0 }, // South (e.g. Evergreen Gardens, Katie's Dreamland, Funtopia)
                         {   0,   0,  0 }, // West (e.g. Mineral Park)
                     },
                     // viewport 3
                     {
-                        {   0,   0,  0 }, // North (e.g. Bumbly Beach, White Water Park, Paradise Pier)
+                        {  -7,   2,  0 }, // North (e.g. Bumbly Beach, White Water Park, Paradise Pier)
                         {  -2,   7,  0 }, // East (e.g. Forest Frontiers, Rainbow Valley, Barony Bridge)
                         {   0,   0,  0 }, // South (e.g. Ghost Town, Okinawa Coast)
                         {   0,   0,  0 }, // West (e.g. Haunted Harbour, Dusty Greens, Six Flags Magic Mountain)
