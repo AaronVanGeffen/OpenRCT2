@@ -235,7 +235,7 @@ namespace OpenRCT2
                     {
                         {   0,   0,  0 }, // North (e.g. Prehistoric - After the Asteroid)
                         {   0,   0,  0 }, // East (e.g. Bigrock Blast, Choo Choo Town)
-                        {   0,   0,  0 }, // South (e.g. Mel’s World, Mystic Mountain)
+                        {   7,  -2,  0 }, // South (e.g. Mel’s World, Mystic Mountain)
                         {   2,  -7,  0 }, // West (e.g. Dynamite Dunes, Leafy Lake, Diamond Heights, Three Monkeys Park)
                     },
                     // viewport 2
