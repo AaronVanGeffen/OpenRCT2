@@ -213,7 +213,8 @@ namespace OpenRCT2
         CoordsXYZD mapPosXYZD{};
         if (!gameState.park.Entrances.empty())
         {
-            mapPosXYZ = gameState.park.Entrances[0];
+            auto entranceId = gameState.park.Entrances.size() / 2;
+            mapPosXYZ = gameState.park.Entrances[entranceId];
             auto el = MapGetParkEntranceElementAt(mapPosXYZ, false);
             if (el != nullptr)
             {
