@@ -301,7 +301,7 @@ namespace OpenRCT2::Title
 
         bool LoadParkFromFile(const u8string& path)
         {
-            LOG_INFO("TitleSequencePlayer::LoadParkFromFile(%s)", path.c_str());
+            LOG_VERBOSE("TitleSequencePlayer::LoadParkFromFile(%s)", path.c_str());
             bool success = false;
             try
             {

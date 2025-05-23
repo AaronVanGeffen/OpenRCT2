@@ -213,37 +213,60 @@ namespace OpenRCT2
         CoordsXYZD mapPosXYZD{};
         if (!gameState.park.Entrances.empty())
         {
-            const auto& entrance = gameState.park.Entrances[0];
-            mapPosXYZ = CoordsXYZ{ entrance.x + 16, entrance.y + 16, entrance.z + 32, entrance.direction };
-
-            auto el = MapGetParkEntranceElementAt(entrance, false);
+            mapPosXYZ = gameState.park.Entrances[0];
+            auto el = MapGetParkEntranceElementAt(mapPosXYZ, false);
             if (el != nullptr)
             {
-                auto rotation = static_cast<uint8_t>(el->GetDirection());
-                printf("\rPark element rotation: %d\n", rotation);
+                auto viewportRotation = mainViewport->rotation;
+                auto entranceRotation = el->GetDirection();
 
-                auto viewPos = centre_2d_coordinates(mapPosXYZ, mainViewport);
-                if (viewPos != std::nullopt)
-                    mainViewport->viewPos = *viewPos;
+                printf("\rPark name: %s, viewport rotation: %d, entrance rotation: %d\n",
+                    gameState.park.Name.c_str(), viewportRotation, entranceRotation);
 
-                printf("\rViewport rotation before: %d\n", mainViewport->rotation);
+                static TileCoordsXYZ coords[4][4] = {
+                    // viewport 0
+                    {
+                        {   0,   0,  0 }, // North (e.g. Pokey Park, Millennium Mines, Crumbly Woods)
+                        {   0,   0,  0 }, // East (e.g. Cleveland's Luna Park)
+                        {   0,   0,  0 }, // South (e.g. Crater Lake, Urbis Incognitus)
+                        {   0,   0,  0 }, // West (e.g. Trinity Islands, Whispering Cliffs, Canary Mines)
+                    },
+                    // viewport 1
+                    {
+                        {   0,   0,  0 }, // North (e.g. Prehistoric - After the Asteroid)
+                        {   0,   0,  0 }, // East (e.g. Bigrock Blast, Choo Choo Town)
+                        {   0,   0,  0 }, // South (e.g. Mel’s World, Mystic Mountain)
+                        {   2,  -7,  0 }, // West (e.g. Dynamite Dunes, Leafy Lake, Diamond Heights, Three Monkeys Park)
+                    },
+                    // viewport 2
+                    {
+                        {   0,   0,  0 }, // North (n/a)
+                        {   0,   0,  0 }, // East (e.g. Mega Park, Gentle Glen)
+                        {   0,   0,  0 }, // South (e.g. Evergreen Gardens, Katie's Dreamland, Funtopia)
+                        {   0,   0,  0 }, // West (e.g. Mineral Park)
+                    },
+                    // viewport 3
+                    {
+                        {   0,   0,  0 }, // North (e.g. Bumbly Beach, White Water Park, Paradise Pier)
+                        {  -2,   7,  0 }, // East (e.g. Forest Frontiers, Rainbow Valley, Barony Bridge)
+                        {   0,   0,  0 }, // South (e.g. Ghost Town, Okinawa Coast)
+                        {   0,   0,  0 }, // West (e.g. Haunted Harbour, Dusty Greens, Six Flags Magic Mountain)
+                    },
+                };
 
-                while (mainViewport->rotation != rotation)
-                {
-                    printf("\rRotating once\n");
-                    ViewportRotateSingle(mainWindow, 1);
-                }
-
-                printf("\rViewport rotation after: %d\n", mainViewport->rotation);
+                mapPosXYZ += coords[viewportRotation][entranceRotation].ToCoordsXYZ() + CoordsXYZ{ 0, 0, 16 };
             }
-            else
-            {
-                printf("\rNo entrance found!\n");
-            }
+
+            mapPosXYZ = mapPosXYZ.ToTileCentre();
         }
         else
         {
             return std::nullopt;
+        }
+
+        if (auto viewPos = centre_2d_coordinates(mapPosXYZ, mainViewport); viewPos != std::nullopt)
+        {
+            mainViewport->viewPos = *viewPos;
         }
 
         PreviewImage image{
