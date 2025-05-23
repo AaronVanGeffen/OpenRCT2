@@ -227,14 +227,14 @@ namespace OpenRCT2
                     // viewport 0
                     {
                         {  -7,  -2,  0 }, // North (e.g. Pokey Park, Millennium Mines, Crumbly Woods)
-                        {   0,   0,  0 }, // East (e.g. Cleveland's Luna Park)
-                        {   0,   0,  0 }, // South (e.g. Crater Lake, Urbis Incognitus)
+                        {   2,   7,  0 }, // East (e.g. Rocky Rambles, Cleveland's Luna Park)
+                        {   7,   2,  0 }, // South (e.g. Crater Lake, Urbis Incognitus)
                         {  -2,  -7,  0 }, // West (e.g. Trinity Islands, Whispering Cliffs, Canary Mines)
                     },
                     // viewport 1
                     {
-                        {   0,   0,  0 }, // North (e.g. Prehistoric - After the Asteroid)
-                        {   0,   0,  0 }, // East (e.g. Bigrock Blast, Choo Choo Town)
+                        {  -7,   2,  0 }, // North (e.g. Prehistoric - After the Asteroid)
+                        {  -2,   7,  0 }, // East (e.g. Bigrock Blast, Choo Choo Town)
                         {   7,  -2,  0 }, // South (e.g. Mel’s World, Mystic Mountain)
                         {   2,  -7,  0 }, // West (e.g. Dynamite Dunes, Leafy Lake, Diamond Heights, Three Monkeys Park)
                     },
