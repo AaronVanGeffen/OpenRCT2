@@ -241,20 +241,20 @@ namespace OpenRCT2
                     // viewport 2
                     {
                         {   0,   0,  0 }, // North (n/a)
-                        {   0,   0,  0 }, // East (e.g. Mega Park, Gentle Glen)
+                        {   2,   7,  0 }, // East (e.g. Mega Park, Gentle Glen)
                         {   7,   2,  0 }, // South (e.g. Evergreen Gardens, Katie's Dreamland, Funtopia)
-                        {   0,   0,  0 }, // West (e.g. Mineral Park)
+                        {  -2,  -7,  0 }, // West (e.g. Mineral Park)
                     },
                     // viewport 3
                     {
                         {  -7,   2,  0 }, // North (e.g. Bumbly Beach, White Water Park, Paradise Pier)
                         {  -2,   7,  0 }, // East (e.g. Forest Frontiers, Rainbow Valley, Barony Bridge)
-                        {   0,   0,  0 }, // South (e.g. Ghost Town, Okinawa Coast)
-                        {   0,   0,  0 }, // West (e.g. Haunted Harbour, Dusty Greens, Six Flags Magic Mountain)
+                        {   7,  -2,  0 }, // South (e.g. Ghost Town, Okinawa Coast)
+                        {   2,  -7,  0 }, // West (e.g. Haunted Harbour, Dusty Greens, Six Flags Magic Mountain)
                     },
                 };
 
-                mapPosXYZ += coords[viewportRotation][entranceRotation].ToCoordsXYZ() + CoordsXYZ{ 0, 0, 16 };
+                mapPosXYZ += coords[viewportRotation][entranceRotation].ToCoordsXYZ() + CoordsXYZ{ 0, 0, 0 };
             }
 
             mapPosXYZ = mapPosXYZ.ToTileCentre();
