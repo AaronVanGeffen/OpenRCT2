@@ -368,13 +368,33 @@ namespace OpenRCT2::Title
                 auto& objectManager = GetContext()->GetObjectManager();
                 if (auto* stexObject = objectManager.GetLoadedObject<ScenarioTextObject>(0); stexObject != nullptr)
                 {
+                    static constexpr std::string kSourceGames[] = {
+                        "official", "rct2ww", "rct2tt", "official", "rct1", "rct1", "rct1", "rct2", "rct2",
+                    };
+
+                    auto game = EnumValue(stexObject->GetSourceGames()[0]);
+                    auto sourceGame = kSourceGames[game];
+                    printf("\rsource game: %s\n", sourceGame.c_str());
+
+                    auto metaPath = fs::path("/Users/aaron/scenario_meta") / sourceGame / "scenario_meta"
+                        / stexObject->GetIdentifier() / "images";
+
+                    printf("\rdir: %s\n", metaPath.c_str());
+                    fs::create_directories(metaPath);
+
                     auto preview = generatePreviewFromGameState(getGameState());
                     for (auto& image : preview.images)
                     {
-                        if (image.type != PreviewImageType::screenshot)
+                        auto filename = metaPath;
+                        if (image.type == PreviewImageType::miniMap)
+                            filename /= "minimap.png";
+                        else if (image.type == PreviewImageType::screenshot)
+                            filename /= "screenshot.png";
+                        else
                             continue;
 
-                        auto filename = fs::path("/Users/aaron/scenario_meta/") / (std::string(stexObject->GetIdentifier()) + ".png");
+                        printf("\routput: %s\n", filename.c_str());
+
                         writePreviewImageToFile(image, filename);
                     }
                 }
