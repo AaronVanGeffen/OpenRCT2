@@ -1438,8 +1438,8 @@ ImageId ScrollingTextSetup(
 
     assert(scrollingMode < kMaxScrollingTextModes);
 
-    if (session.DPI.zoom_level > ZoomLevel{ 0 })
-        return ImageId(SPR_SCROLLING_TEXT_DEFAULT);
+    // if (session.DPI.zoom_level > ZoomLevel{ 0 })
+    //     return ImageId(SPR_SCROLLING_TEXT_DEFAULT);
 
     _drawSCrollNextIndex++;
     ft.Rewind();
