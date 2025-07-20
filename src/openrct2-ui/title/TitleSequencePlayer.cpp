@@ -29,7 +29,7 @@
 #include <openrct2/localisation/StringIds.h>
 #include <openrct2/management/NewsItem.h>
 #include <openrct2/object/ObjectManager.h>
-#include <openrct2/object/ScenarioTextObject.h>
+#include <openrct2/object/ScenarioMetaObject.h>
 #include <openrct2/park/ParkPreview.h>
 #include <openrct2/scenario/ScenarioRepository.h>
 #include <openrct2/scenario/ScenarioSources.h>
@@ -332,52 +332,24 @@ namespace OpenRCT2::Title
                     ReportProgress(100);
 
                     MapAnimations::MarkAllTiles();
-
-                    if (auto* stexObject = objectManager.GetLoadedObject<ScenarioTextObject>(0); stexObject != nullptr)
-                    {
-                        auto preview = generatePreviewFromGameState(getGameState());
-                        for (auto& image : preview.images)
-                        {
-                            static constexpr std::string_view kSourceGames[] = {
-                                "custom", "rct2ww", "rct2tt", "official", "rct1", "rct1", "rct1", "rct2",
-                            };
-
-                            auto game = EnumValue(stexObject->GetSourceGames()[0]);
-                            auto sourceGame = kSourceGames[game];
-
-                            auto metaPath = fs::path("/Users/aaron/scenario_meta/") / sourceGame / "scenario_meta"
-                                / stexObject->GetIdentifier() / "images";
-                            fs::create_directories(metaPath);
-
-                            auto filename = metaPath;
-                            if (image.type == PreviewImageType::miniMap)
-                                filename /= "minimap.png";
-                            else if (image.type == PreviewImageType::screenshot)
-                                filename /= "screenshot.png";
-                            else
-                                continue;
-
-                            writePreviewImageToFile(image, filename);
-                        }
-                    }
                 }
                 PrepareParkForPlayback();
                 _initialLoadCommand = false;
                 success = true;
 
                 auto& objectManager = GetContext()->GetObjectManager();
-                if (auto* stexObject = objectManager.GetLoadedObject<ScenarioTextObject>(0); stexObject != nullptr)
+                if (auto* metaObject = objectManager.GetLoadedObject<ScenarioMetaObject>(0); metaObject != nullptr)
                 {
                     static constexpr std::string kSourceGames[] = {
                         "official", "rct2ww", "rct2tt", "official", "rct1", "rct1", "rct1", "rct2", "rct2",
                     };
 
-                    auto game = EnumValue(stexObject->GetSourceGames()[0]);
+                    auto game = EnumValue(metaObject->GetSourceGames()[0]);
                     auto sourceGame = kSourceGames[game];
                     printf("\rsource game: %s\n", sourceGame.c_str());
 
                     auto metaPath = fs::path("/Users/aaron/scenario_meta") / sourceGame / "scenario_meta"
-                        / stexObject->GetIdentifier() / "images";
+                        / metaObject->GetIdentifier() / "images";
 
                     printf("\rdir: %s\n", metaPath.c_str());
                     fs::create_directories(metaPath);

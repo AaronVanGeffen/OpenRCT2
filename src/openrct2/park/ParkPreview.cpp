@@ -213,8 +213,8 @@ namespace OpenRCT2
         CoordsXYZD mapPosXYZD{};
         if (!gameState.park.Entrances.empty())
         {
-            mapPosXYZ = gameState.park.Entrances[0];
-            auto el = MapGetParkEntranceElementAt(mapPosXYZ, false);
+            mapPosXYZD = gameState.park.Entrances[0];
+            auto el = MapGetParkEntranceElementAt(mapPosXYZD, false);
             if (el != nullptr)
             {
                 auto viewportRotation = mainViewport->rotation;
@@ -254,17 +254,17 @@ namespace OpenRCT2
                     },
                 };
 
-                mapPosXYZ += coords[viewportRotation][entranceRotation].ToCoordsXYZ() + CoordsXYZ{ 0, 0, 0 };
+                mapPosXYZD += coords[viewportRotation][entranceRotation].ToCoordsXYZ() + CoordsXYZ{ 0, 0, 0 };
             }
 
-            mapPosXYZ = mapPosXYZ.ToTileCentre();
+            mapPosXYZD = mapPosXYZD.ToTileCentre();
         }
         else
         {
             return std::nullopt;
         }
 
-        if (auto viewPos = centre_2d_coordinates(mapPosXYZ, mainViewport); viewPos != std::nullopt)
+        if (auto viewPos = centre_2d_coordinates(mapPosXYZD, mainViewport); viewPos != std::nullopt)
         {
             mainViewport->viewPos = *viewPos;
         }
