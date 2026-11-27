@@ -33,7 +33,7 @@ using namespace OpenRCT2::Drawing;
 
 namespace OpenRCT2::Ui::Windows
 {
-    enum
+    enum : uint8_t
     {
         WINDOW_MULTIPLAYER_PAGE_INFORMATION,
         WINDOW_MULTIPLAYER_PAGE_PLAYERS,
@@ -73,22 +73,22 @@ namespace OpenRCT2::Ui::Windows
     };
 
     static constexpr ScreenSize kWindowSize = { 340, 240 };
-    // clang-format off
 
+    // clang-format off
     static constexpr auto kMainMultiplayerWidgets = makeWidgets(
         makeWindowShim(kStringIdNone, kWindowSize),
-        makeWidget({  0, 43}, {340, 197}, WidgetType::resize, WindowColour::secondary                          ),
+        makeWidget({  0, 43}, {340, 197}, WidgetType::resize, WindowColour::secondary),
         Widgets::Tab({  3, 17}, STR_SHOW_SERVER_INFO_TIP),
         Widgets::Tab({ 34, 17}, STR_PLAYERS_TIP         ),
         Widgets::Tab({ 65, 17}, STR_GROUPS_TIP          ),
         Widgets::Tab({ 96, 17}, STR_OPTIONS_TIP         )
     );
 
-    static constexpr auto window_multiplayer_information_widgets = makeWidgets(
+    static constexpr auto kInformationWidgets = makeWidgets(
         kMainMultiplayerWidgets
     );
 
-    static constexpr auto window_multiplayer_players_widgets = makeWidgets(
+    static constexpr auto kPlayersWidgets = makeWidgets(
         kMainMultiplayerWidgets,
         makeWidget({  3, 46}, {173,  15}, WidgetType::tableHeader, WindowColour::secondary  , STR_PLAYER     ), // Player name
         makeWidget({176, 46}, { 83,  15}, WidgetType::tableHeader, WindowColour::secondary  , STR_GROUP      ), // Player name
@@ -97,7 +97,7 @@ namespace OpenRCT2::Ui::Windows
         makeWidget({  3, 60}, {334, 177}, WidgetType::scroll,      WindowColour::secondary, SCROLL_VERTICAL) // list
     );
 
-    static constexpr auto window_multiplayer_groups_widgets = makeWidgets(
+    static constexpr auto kGroupsWidgets = makeWidgets(
         kMainMultiplayerWidgets,
         makeWidget({141, 46}, {175,  12}, WidgetType::dropdownMenu, WindowColour::secondary                    ), // default group
         makeWidget({305, 47}, { 11,  10}, WidgetType::button,       WindowColour::secondary, STR_DROPDOWN_GLYPH),
@@ -109,41 +109,33 @@ namespace OpenRCT2::Ui::Windows
         makeWidget({  3, 94}, {314, 207}, WidgetType::scroll,       WindowColour::secondary, SCROLL_VERTICAL   ) // permissions list
     );
 
-    static constexpr auto window_multiplayer_options_widgets = makeWidgets(
+    static constexpr auto kOptionsWidgets = makeWidgets(
         kMainMultiplayerWidgets,
         Widgets::Checkbox({3, 50}, {295, 12}, WindowColour::secondary, STR_LOG_CHAT,              STR_LOG_CHAT_TIP             ),
         Widgets::Checkbox({3, 64}, {295, 12}, WindowColour::secondary, STR_LOG_SERVER_ACTIONS,    STR_LOG_SERVER_ACTIONS_TIP   ),
         Widgets::Checkbox({3, 78}, {295, 12}, WindowColour::secondary, STR_ALLOW_KNOWN_KEYS_ONLY, STR_ALLOW_KNOWN_KEYS_ONLY_TIP)
     );
-
-    static std::span<const Widget> window_multiplayer_page_widgets[] = {
-        window_multiplayer_information_widgets,
-        window_multiplayer_players_widgets,
-        window_multiplayer_groups_widgets,
-        window_multiplayer_options_widgets,
-    };
-
-    static constexpr StringId WindowMultiplayerPageTitles[] = {
-        STR_MULTIPLAYER_INFORMATION_TITLE,
-        STR_MULTIPLAYER_PLAYERS_TITLE,
-        STR_MULTIPLAYER_GROUPS_TITLE,
-        STR_MULTIPLAYER_OPTIONS_TITLE,
-    };
-
     // clang-format on
 
-    static constexpr int32_t window_multiplayer_animation_divisor[] = {
-        4,
-        4,
-        2,
-        2,
+    struct MultiplayerTabInfo
+    {
+        WidgetIndex tabWidgetIndex;
+        std::span<const Widget> widgets;
+        uint8_t tabId;
+        StringId tabTitle;
+        int32_t baseImageId;
+        int32_t numAnimationFrames;
+        int32_t animationDivisor;
     };
-    static constexpr int32_t window_multiplayer_animation_frames[] = {
-        8,
-        8,
-        7,
-        4,
-    };
+
+    // clang-format off
+    static constexpr std::array kTabInfo = std::to_array<MultiplayerTabInfo>({
+        { WIDX_TAB1, kInformationWidgets, WINDOW_MULTIPLAYER_PAGE_INFORMATION, STR_MULTIPLAYER_INFORMATION_TITLE, SPR_TAB_KIOSKS_AND_FACILITIES_0, 8, 4 },
+        { WIDX_TAB2, kPlayersWidgets,     WINDOW_MULTIPLAYER_PAGE_PLAYERS,     STR_MULTIPLAYER_PLAYERS_TITLE,     SPR_TAB_GUESTS_0,                8, 4 },
+        { WIDX_TAB3, kGroupsWidgets,      WINDOW_MULTIPLAYER_PAGE_GROUPS,      STR_MULTIPLAYER_GROUPS_TITLE,      SPR_TAB_STAFF_OPTIONS_0,         7, 2 },
+        { WIDX_TAB4, kOptionsWidgets,     WINDOW_MULTIPLAYER_PAGE_OPTIONS,     STR_MULTIPLAYER_OPTIONS_TITLE,     SPR_TAB_GEARS_0,                 4, 2 },
+    });
+    // clang-format on
 
     static bool IsServerPlayerInvisible()
     {
@@ -422,19 +414,19 @@ namespace OpenRCT2::Ui::Windows
             }
         }
 
-        void drawTabImage(RenderTarget& rt, int32_t page_number, int32_t spriteIndex)
+        void drawTabImage(RenderTarget& rt, const MultiplayerTabInfo& tabInfo)
         {
-            WidgetIndex widgetIndex = WIDX_TAB1 + page_number;
+            WidgetIndex widgetIndex = tabInfo.tabWidgetIndex;
 
             if (!isWidgetDisabled(widgetIndex))
             {
-                if (page == page_number)
+                auto spriteIndex = ImageId(tabInfo.baseImageId);
+                if (page == tabInfo.tabId)
                 {
-                    int32_t numFrames = window_multiplayer_animation_frames[page];
-                    if (numFrames > 1)
+                    if (tabInfo.numAnimationFrames > 1)
                     {
-                        int32_t frame = currentFrame / window_multiplayer_animation_divisor[page];
-                        spriteIndex += (frame % numFrames);
+                        int32_t frame = currentFrame / tabInfo.animationDivisor;
+                        spriteIndex = spriteIndex.WithIndexOffset(frame % tabInfo.numAnimationFrames);
                     }
                 }
 
@@ -446,10 +438,10 @@ namespace OpenRCT2::Ui::Windows
 
         void drawTabImages(RenderTarget& rt)
         {
-            drawTabImage(rt, WINDOW_MULTIPLAYER_PAGE_INFORMATION, SPR_TAB_KIOSKS_AND_FACILITIES_0);
-            drawTabImage(rt, WINDOW_MULTIPLAYER_PAGE_PLAYERS, SPR_TAB_GUESTS_0);
-            drawTabImage(rt, WINDOW_MULTIPLAYER_PAGE_GROUPS, SPR_TAB_STAFF_OPTIONS_0);
-            drawTabImage(rt, WINDOW_MULTIPLAYER_PAGE_OPTIONS, SPR_TAB_GEARS_0);
+            for (const auto& tab : kTabInfo)
+            {
+                drawTabImage(rt, tab);
+            }
         }
 
         ScreenSize informationGetSize()
@@ -517,8 +509,8 @@ namespace OpenRCT2::Ui::Windows
             numListItems = 0;
             selectedListItem = -1;
 
-            setWidgets(window_multiplayer_page_widgets[page]);
-            widgets[WIDX_TITLE].text = WindowMultiplayerPageTitles[page];
+            setWidgets(kTabInfo[page].widgets);
+            widgets[WIDX_TITLE].text = kTabInfo[page].tabTitle;
             setWidgetPressed(WIDX_TAB1 + page, true);
 
             refreshList();
