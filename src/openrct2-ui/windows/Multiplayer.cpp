@@ -72,7 +72,8 @@ namespace OpenRCT2::Ui::Windows
         WIDX_KNOWN_KEYS_ONLY_CHECKBOX,
     };
 
-    static constexpr ScreenSize kWindowSize = { 340, 240 };
+    static constexpr int32_t kBaseWidth = 420;
+    static constexpr ScreenSize kWindowSize = { kBaseWidth, 240 };
 
     // clang-format off
     static constexpr auto kMainMultiplayerWidgets = makeWidgets(
@@ -449,15 +450,12 @@ namespace OpenRCT2::Ui::Windows
             assert(!_windowInformationSize.has_value());
 
             int32_t lineHeight = FontGetLineHeight(FontStyle::medium);
-
-            // Base dimensions.
-            const int32_t baseWidth = 450;
             int32_t baseHeight = 55;
 
             // Server name is displayed word-wrapped, so figure out how high it will be.
             {
                 int32_t numLines;
-                wrapString(Network::GetServerName(), baseWidth, FontStyle::medium, nullptr, &numLines);
+                wrapString(Network::GetServerName(), kBaseWidth, FontStyle::medium, nullptr, &numLines);
                 baseHeight += (numLines + 1) * lineHeight + (kListRowHeight / 2);
             }
 
@@ -466,7 +464,7 @@ namespace OpenRCT2::Ui::Windows
             if (!descString.empty())
             {
                 int32_t numLines;
-                wrapString(descString, baseWidth, FontStyle::medium, nullptr, &numLines);
+                wrapString(descString, kBaseWidth, FontStyle::medium, nullptr, &numLines);
                 baseHeight += (numLines + 1) * lineHeight + (kListRowHeight / 2);
             }
 
@@ -485,9 +483,8 @@ namespace OpenRCT2::Ui::Windows
                     baseHeight += kListRowHeight;
             }
 
-            // TODO: Are these casts still neccessary?
-            _windowInformationSize = { static_cast<int16_t>(baseWidth), static_cast<int16_t>(baseHeight) };
-            return _windowInformationSize.value();
+            _windowInformationSize = { kBaseWidth, baseHeight };
+            return *_windowInformationSize;
         }
 
     public:
@@ -604,7 +601,7 @@ namespace OpenRCT2::Ui::Windows
                 }
                 case WINDOW_MULTIPLAYER_PAGE_PLAYERS:
                 {
-                    WindowSetResize(*this, { 420, 124 }, { 500, 450 });
+                    WindowSetResize(*this, { kBaseWidth, 124 }, { 500, 450 });
 
                     widgets[WIDX_HEADER_PING].right = width - 5;
 
@@ -614,7 +611,7 @@ namespace OpenRCT2::Ui::Windows
                 }
                 case WINDOW_MULTIPLAYER_PAGE_GROUPS:
                 {
-                    WindowSetResize(*this, { 320, 200 }, { 320, 500 });
+                    WindowSetResize(*this, { kBaseWidth, 200 }, { 320, 500 });
 
                     numListItems = Network::GetNumActions();
 
