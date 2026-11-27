@@ -58,7 +58,8 @@ namespace OpenRCT2::Ui::Windows
         WIDX_HEADER_PING,
         WIDX_LIST,
 
-        WIDX_DEFAULT_GROUP = 8,
+        WIDX_DEFAULT_GROUP_LABEL = 8,
+        WIDX_DEFAULT_GROUP,
         WIDX_DEFAULT_GROUP_DROPDOWN,
         WIDX_ADD_GROUP,
         WIDX_REMOVE_GROUP,
@@ -100,13 +101,14 @@ namespace OpenRCT2::Ui::Windows
 
     static constexpr auto kGroupsWidgets = makeWidgets(
         kMainMultiplayerWidgets,
-        makeWidget({141, 46}, {175,  12}, WidgetType::dropdownMenu, WindowColour::secondary                    ), // default group
-        makeWidget({305, 47}, { 11,  10}, WidgetType::button,       WindowColour::secondary, STR_DROPDOWN_GLYPH),
-        makeWidget({ 11, 65}, { 92,  12}, WidgetType::button,       WindowColour::secondary, STR_ADD_GROUP     ), // add group button
-        makeWidget({113, 65}, { 92,  12}, WidgetType::button,       WindowColour::secondary, STR_REMOVE_GROUP  ), // remove group button
-        makeWidget({215, 65}, { 92,  12}, WidgetType::button,       WindowColour::secondary, STR_RENAME_GROUP  ), // rename group button
-        makeWidget({ 72, 80}, {175,  12}, WidgetType::dropdownMenu, WindowColour::secondary                    ), // selected group
-        makeWidget({236, 81}, { 11,  10}, WidgetType::button,       WindowColour::secondary, STR_DROPDOWN_GLYPH),
+        makeWidget({  4, 47}, {130,  12}, WidgetType::label,        WindowColour::secondary, STR_DEFAULT_GROUP ), // default group label
+        makeWidget({141, 46}, {175,  14}, WidgetType::dropdownMenu, WindowColour::secondary                    ), // default group
+        makeWidget({305, 47}, { 11,  12}, WidgetType::button,       WindowColour::secondary, STR_DROPDOWN_GLYPH),
+        makeWidget({ 11, 65}, { 92,  14}, WidgetType::button,       WindowColour::secondary, STR_ADD_GROUP     ), // add group button
+        makeWidget({113, 65}, { 92,  14}, WidgetType::button,       WindowColour::secondary, STR_REMOVE_GROUP  ), // remove group button
+        makeWidget({215, 65}, { 92,  14}, WidgetType::button,       WindowColour::secondary, STR_RENAME_GROUP  ), // rename group button
+        makeWidget({ 72, 80}, {175,  14}, WidgetType::dropdownMenu, WindowColour::secondary                    ), // selected group
+        makeWidget({236, 81}, { 11,  12}, WidgetType::button,       WindowColour::secondary, STR_DROPDOWN_GLYPH),
         makeWidget({  3, 94}, {314, 207}, WidgetType::scroll,       WindowColour::secondary, SCROLL_VERTICAL   ) // permissions list
     );
 
@@ -350,15 +352,10 @@ namespace OpenRCT2::Ui::Windows
             }
 
             auto screenPos = windowPos
-                + ScreenCoordsXY{ widgets[WIDX_CONTENT_PANEL].left + 4, widgets[WIDX_CONTENT_PANEL].top + 4 };
-
-            drawText(rt, screenPos, STR_DEFAULT_GROUP, { colours[2] });
-
-            screenPos.y += 20;
+                + ScreenCoordsXY{ widgets[WIDX_CONTENT_PANEL].left + 4, widgets[WIDX_CONTENT_PANEL].top + 18 };
 
             Rectangle::fillInset(
-                rt, { screenPos - ScreenCoordsXY{ 0, 6 }, screenPos + ScreenCoordsXY{ 310, -5 } }, colours[1],
-                Rectangle::BorderStyle::inset);
+                rt, { screenPos, screenPos + ScreenCoordsXY{ width - 10, 1 } }, colours[1], Rectangle::BorderStyle::inset);
 
             widget = &widgets[WIDX_SELECTED_GROUP];
             group = Network::GetGroupIndex(_selectedGroup);
