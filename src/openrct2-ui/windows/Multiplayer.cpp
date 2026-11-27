@@ -90,11 +90,11 @@ namespace OpenRCT2::Ui::Windows
 
     static constexpr auto kPlayersWidgets = makeWidgets(
         kMainMultiplayerWidgets,
-        makeWidget({  3, 46}, {173,  15}, WidgetType::tableHeader, WindowColour::secondary  , STR_PLAYER     ), // Player name
-        makeWidget({176, 46}, { 83,  15}, WidgetType::tableHeader, WindowColour::secondary  , STR_GROUP      ), // Player name
-        makeWidget({259, 46}, {100,  15}, WidgetType::tableHeader, WindowColour::secondary  , STR_LAST_ACTION), // Player name
-        makeWidget({359, 46}, { 42,  15}, WidgetType::tableHeader, WindowColour::secondary  , STR_PING       ), // Player name
-        makeWidget({  3, 60}, {334, 177}, WidgetType::scroll,      WindowColour::secondary, SCROLL_VERTICAL) // list
+        makeWidget({  3, 46}, {173,  15}, WidgetType::tableHeader, WindowColour::secondary, STR_PLAYER     ), // Player name
+        makeWidget({176, 46}, { 83,  15}, WidgetType::tableHeader, WindowColour::secondary, STR_GROUP      ), // Group
+        makeWidget({259, 46}, {100,  15}, WidgetType::tableHeader, WindowColour::secondary, STR_LAST_ACTION), // Last action
+        makeWidget({359, 46}, { 42,  15}, WidgetType::tableHeader, WindowColour::secondary, STR_PING       ), // Ping
+        makeWidget({  3, 60}, {334, 177}, WidgetType::scroll,      WindowColour::secondary, SCROLL_VERTICAL)  // List
     );
 
     static constexpr auto kGroupsWidgets = makeWidgets(
