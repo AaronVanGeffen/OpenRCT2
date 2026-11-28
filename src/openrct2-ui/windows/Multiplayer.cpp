@@ -347,8 +347,8 @@ namespace OpenRCT2::Ui::Windows
                 auto ft = Formatter();
                 ft.Add<const char*>(_buffer.c_str());
                 drawTextEllipsised(
-                    rt, windowPos + ScreenCoordsXY{ widget->midX() - 5, widget->top }, widget->width() - 9, STR_STRING, ft,
-                    { TextAlignment::centre });
+                    rt, windowPos + ScreenCoordsXY{ widget->midX() - 5, widget->textTop() }, widget->width() - 9, STR_STRING,
+                    ft, { TextAlignment::centre });
             }
 
             auto screenPos = windowPos
@@ -364,7 +364,7 @@ namespace OpenRCT2::Ui::Windows
                 _buffer.assign("{WINDOW_COLOUR_2}");
                 _buffer += Network::GetGroupName(group);
                 drawTextEllipsised(
-                    rt, windowPos + ScreenCoordsXY{ widget->midX() - 5, widget->top }, widget->width() - 9, _buffer,
+                    rt, windowPos + ScreenCoordsXY{ widget->midX() - 5, widget->textTop() }, widget->width() - 9, _buffer,
                     { TextAlignment::centre });
             }
         }

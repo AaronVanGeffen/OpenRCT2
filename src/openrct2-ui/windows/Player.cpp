@@ -432,7 +432,7 @@ namespace OpenRCT2::Ui::Windows
                 _buffer += Network::GetGroupName(groupindex);
 
                 drawTextEllipsised(
-                    rt, windowPos + ScreenCoordsXY{ widget->midX() - 5, widget->top }, widget->width() - 9, _buffer,
+                    rt, windowPos + ScreenCoordsXY{ widget->midX() - 5, widget->textTop() }, widget->width() - 9, _buffer,
                     { TextAlignment::centre });
             }
 
