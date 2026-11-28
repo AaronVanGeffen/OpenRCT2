@@ -3882,3 +3882,4 @@ STR_7092    :Remove
 STR_7093    :Rename
 STR_7094    :Edit permissions for group:
 STR_7095    :Manage groups:
+STR_7096    :Default group for new players:

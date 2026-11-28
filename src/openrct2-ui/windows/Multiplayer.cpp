@@ -103,18 +103,18 @@ namespace OpenRCT2::Ui::Windows
 
     static constexpr auto kGroupsWidgets = makeWidgets(
         kMainMultiplayerWidgets,
-        makeWidget({  4, 47}, {130,  12}, WidgetType::label,        WindowColour::secondary, STR_DEFAULT_GROUP ), // default group label
-        makeWidget({141, 46}, {175,  14}, WidgetType::dropdownMenu, WindowColour::secondary                    ), // default group
-        makeWidget({305, 47}, { 11,  12}, WidgetType::button,       WindowColour::secondary, STR_DROPDOWN_GLYPH),
+        makeWidget({  4, 47}, {170,  12}, WidgetType::label,        WindowColour::secondary, STR_DEFAULT_GROUP ), // default group label
+        makeWidget({181, 46}, {175,  14}, WidgetType::dropdownMenu, WindowColour::secondary                    ), // default group
+        makeWidget({345, 47}, { 11,  12}, WidgetType::button,       WindowColour::secondary, STR_DROPDOWN_GLYPH),
 
-        makeWidget({  4, 65}, {130,  12}, WidgetType::label,        WindowColour::secondary, STR_EDIT_RERMISSIONS_FOR_GROUP), // selected group label
-        makeWidget({141, 64}, {175,  14}, WidgetType::dropdownMenu, WindowColour::secondary                    ), // selected group
-        makeWidget({305, 65}, { 11,  12}, WidgetType::button,       WindowColour::secondary, STR_DROPDOWN_GLYPH),
+        makeWidget({  4, 65}, {170,  12}, WidgetType::label,        WindowColour::secondary, STR_EDIT_RERMISSIONS_FOR_GROUP), // selected group label
+        makeWidget({181, 64}, {175,  14}, WidgetType::dropdownMenu, WindowColour::secondary                    ), // selected group
+        makeWidget({345, 65}, { 11,  12}, WidgetType::button,       WindowColour::secondary, STR_DROPDOWN_GLYPH),
 
-        makeWidget({  4, 81}, {130,  12}, WidgetType::label,        WindowColour::secondary, STR_MANAGE_GROUPS ), // selected group label
-        makeWidget({141, 80}, { 55,  14}, WidgetType::button,       WindowColour::secondary, STR_NEW_GROUP     ), // add group button
-        makeWidget({196, 80}, { 60,  14}, WidgetType::button,       WindowColour::secondary, STR_REMOVE_GROUP  ), // remove group button
-        makeWidget({256, 80}, { 60,  14}, WidgetType::button,       WindowColour::secondary, STR_RENAME_GROUP  ), // rename group button
+        makeWidget({  4, 81}, {170,  12}, WidgetType::label,        WindowColour::secondary, STR_MANAGE_GROUPS ), // selected group label
+        makeWidget({181, 80}, { 55,  14}, WidgetType::button,       WindowColour::secondary, STR_NEW_GROUP     ), // add group button
+        makeWidget({236, 80}, { 60,  14}, WidgetType::button,       WindowColour::secondary, STR_REMOVE_GROUP  ), // remove group button
+        makeWidget({296, 80}, { 60,  14}, WidgetType::button,       WindowColour::secondary, STR_RENAME_GROUP  ), // rename group button
 
         makeWidget({  3, 96}, {312, 207}, WidgetType::scroll,       WindowColour::secondary, SCROLL_VERTICAL   ) // permissions list
     );
@@ -611,7 +611,7 @@ namespace OpenRCT2::Ui::Windows
                 }
                 case WINDOW_MULTIPLAYER_PAGE_GROUPS:
                 {
-                    WindowSetResize(*this, { kBaseWidth, 200 }, { 320, 500 });
+                    WindowSetResize(*this, { 360, 244 }, { 360, 400 });
 
                     numListItems = Network::GetNumActions();
 
