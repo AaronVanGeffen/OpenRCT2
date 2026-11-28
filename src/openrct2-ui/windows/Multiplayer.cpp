@@ -61,11 +61,13 @@ namespace OpenRCT2::Ui::Windows
         WIDX_DEFAULT_GROUP_LABEL = 8,
         WIDX_DEFAULT_GROUP,
         WIDX_DEFAULT_GROUP_DROPDOWN,
-        WIDX_ADD_GROUP,
-        WIDX_REMOVE_GROUP,
-        WIDX_RENAME_GROUP,
+        WIDX_EDIT_PERMISSIONS_LABEL,
         WIDX_SELECTED_GROUP,
         WIDX_SELECTED_GROUP_DROPDOWN,
+        WIDX_MANAGE_GROUPS_LABEL,
+        WIDX_NEW_GROUP,
+        WIDX_REMOVE_GROUP,
+        WIDX_RENAME_GROUP,
         WIDX_PERMISSIONS_LIST,
 
         WIDX_LOG_CHAT_CHECKBOX = 8,
@@ -104,12 +106,17 @@ namespace OpenRCT2::Ui::Windows
         makeWidget({  4, 47}, {130,  12}, WidgetType::label,        WindowColour::secondary, STR_DEFAULT_GROUP ), // default group label
         makeWidget({141, 46}, {175,  14}, WidgetType::dropdownMenu, WindowColour::secondary                    ), // default group
         makeWidget({305, 47}, { 11,  12}, WidgetType::button,       WindowColour::secondary, STR_DROPDOWN_GLYPH),
-        makeWidget({ 11, 65}, { 92,  14}, WidgetType::button,       WindowColour::secondary, STR_ADD_GROUP     ), // add group button
-        makeWidget({113, 65}, { 92,  14}, WidgetType::button,       WindowColour::secondary, STR_REMOVE_GROUP  ), // remove group button
-        makeWidget({215, 65}, { 92,  14}, WidgetType::button,       WindowColour::secondary, STR_RENAME_GROUP  ), // rename group button
-        makeWidget({ 72, 80}, {175,  14}, WidgetType::dropdownMenu, WindowColour::secondary                    ), // selected group
-        makeWidget({236, 81}, { 11,  12}, WidgetType::button,       WindowColour::secondary, STR_DROPDOWN_GLYPH),
-        makeWidget({  3, 94}, {314, 207}, WidgetType::scroll,       WindowColour::secondary, SCROLL_VERTICAL   ) // permissions list
+
+        makeWidget({  4, 65}, {130,  12}, WidgetType::label,        WindowColour::secondary, STR_EDIT_RERMISSIONS_FOR_GROUP), // selected group label
+        makeWidget({141, 64}, {175,  14}, WidgetType::dropdownMenu, WindowColour::secondary                    ), // selected group
+        makeWidget({305, 65}, { 11,  12}, WidgetType::button,       WindowColour::secondary, STR_DROPDOWN_GLYPH),
+
+        makeWidget({  4, 81}, {130,  12}, WidgetType::label,        WindowColour::secondary, STR_MANAGE_GROUPS ), // selected group label
+        makeWidget({141, 80}, { 55,  14}, WidgetType::button,       WindowColour::secondary, STR_NEW_GROUP     ), // add group button
+        makeWidget({196, 80}, { 60,  14}, WidgetType::button,       WindowColour::secondary, STR_REMOVE_GROUP  ), // remove group button
+        makeWidget({256, 80}, { 60,  14}, WidgetType::button,       WindowColour::secondary, STR_RENAME_GROUP  ), // rename group button
+
+        makeWidget({  3, 96}, {312, 207}, WidgetType::scroll,       WindowColour::secondary, SCROLL_VERTICAL   ) // permissions list
     );
 
     static constexpr auto kOptionsWidgets = makeWidgets(
@@ -344,11 +351,8 @@ namespace OpenRCT2::Ui::Windows
                 _buffer.assign("{WINDOW_COLOUR_2}");
                 _buffer += Network::GetGroupName(group);
 
-                auto ft = Formatter();
-                ft.Add<const char*>(_buffer.c_str());
                 drawTextEllipsised(
-                    rt, windowPos + ScreenCoordsXY{ widget->midX() - 5, widget->textTop() }, widget->width() - 9, STR_STRING,
-                    ft, { TextAlignment::centre });
+                    rt, windowPos + ScreenCoordsXY{ widget->left + 1, widget->textTop() }, widget->width() - 9, _buffer);
             }
 
             auto screenPos = windowPos
@@ -364,8 +368,7 @@ namespace OpenRCT2::Ui::Windows
                 _buffer.assign("{WINDOW_COLOUR_2}");
                 _buffer += Network::GetGroupName(group);
                 drawTextEllipsised(
-                    rt, windowPos + ScreenCoordsXY{ widget->midX() - 5, widget->textTop() }, widget->width() - 9, _buffer,
-                    { TextAlignment::centre });
+                    rt, windowPos + ScreenCoordsXY{ widget->left + 1, widget->textTop() }, widget->width() - 9, _buffer);
             }
         }
 
@@ -539,7 +542,7 @@ namespace OpenRCT2::Ui::Windows
                 {
                     switch (widgetIndex)
                     {
-                        case WIDX_ADD_GROUP:
+                        case WIDX_NEW_GROUP:
                         {
                             auto networkModifyGroup = GameActions::NetworkModifyGroupAction(
                                 GameActions::ModifyGroupType::addGroup);

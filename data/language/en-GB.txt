@@ -2733,8 +2733,6 @@ STR_5639    :Show list of players
 STR_5640    :Manage groups
 STR_5641    :Default Group:
 STR_5642    :Group
-STR_5643    :Add Group
-STR_5644    :Remove Group
 STR_5645    :Chat
 STR_5646    :Terraform
 STR_5647    :Toggle Pause
@@ -2765,7 +2763,6 @@ STR_5705    :Can’t set to this group
 STR_5706    :Can’t remove group that players belong to
 STR_5707    :This group cannot be modified
 STR_5708    :Can’t change the group that the host belongs to
-STR_5709    :Rename Group
 STR_5710    :Group name
 STR_5711    :Enter new name for this group:
 STR_5712    :Can’t modify permission that you do not have yourself
@@ -3880,3 +3877,8 @@ STR_7087    :Start from scenario…
 STR_7088    :Start from saved game…
 STR_7089    :Publicly advertise server on the OpenRCT2 server list
 STR_7090    :Players online: {BLACK}{COMMA32}
+STR_7091    :New
+STR_7092    :Remove
+STR_7093    :Rename
+STR_7094    :Edit permissions for group:
+STR_7095    :Manage groups:
