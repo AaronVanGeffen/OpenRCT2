@@ -383,15 +383,21 @@ namespace OpenRCT2::Ui::Windows
 
             for (int32_t i = 0; i < Network::GetNumActions(); i++)
             {
-                if (i == selectedListItem)
-                {
-                    Rectangle::filter(
-                        rt, { 0, screenCoords.y, 800, screenCoords.y + kScrollableRowHeight - 1 },
-                        FilterPaletteID::paletteDarken1);
-                }
                 if (screenCoords.y > rt.y + rt.height)
                 {
                     break;
+                }
+
+                const auto screenRect = ScreenRect{ { 0, screenCoords.y }, { 350, screenCoords.y + kScrollableRowHeight - 1 } };
+
+                // If hovering over item, change the colour and fill the backdrop.
+                if (i == selectedListItem)
+                {
+                    Rectangle::fill(rt, screenRect, getColourMap(colours[1].colour).midDark);
+                }
+                else if ((i & 1) != 0)
+                {
+                    Rectangle::fill(rt, screenRect, getColourMap(colours[1].colour).light);
                 }
 
                 if (screenCoords.y + kScrollableRowHeight + 1 >= rt.y)
